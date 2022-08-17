@@ -8,10 +8,12 @@
 
 package com.tinhtx.base_app.di.api
 
+import com.slack.eithernet.ApiResultCallAdapterFactory
+import com.slack.eithernet.ApiResultConverterFactory
 import com.tinhtx.base_app.BuildConfig
 import com.tinhtx.base_app.repository.api.ApiConstants
 import com.tinhtx.base_app.repository.api.UserAgentInterceptor
-import com.tinhtx.base_app.ui.home.repository.HomeApiClient
+import com.tinhtx.base_app.ui.home.repository.HomeApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,7 @@ import javax.inject.Singleton
 
 @Suppress("unused")
 @Module
+@InstallIn(SingletonComponent::class)
 class ApiModule {
 
     @Provides
@@ -51,6 +54,8 @@ class ApiModule {
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(ApiConstants.DOMAIN_API)
+            .addConverterFactory(ApiResultConverterFactory)
+            .addCallAdapterFactory(ApiResultCallAdapterFactory)
             .client(client)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
@@ -60,7 +65,7 @@ class ApiModule {
 
     @Provides
     @Singleton
-    internal fun provideHomeApiClient(retrofit: Retrofit): HomeApiClient {
-        return retrofit.create(HomeApiClient::class.java)
+    internal fun provideHomeApiClient(retrofit: Retrofit): HomeApiService {
+        return retrofit.create(HomeApiService::class.java)
     }
 }

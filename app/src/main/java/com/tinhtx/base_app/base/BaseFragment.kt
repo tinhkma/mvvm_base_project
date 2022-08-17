@@ -20,13 +20,16 @@ import androidx.lifecycle.ViewModelProviders
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseFragment<T : ViewDataBinding, U : BaseViewModel> : DaggerFragment(), DataBindable<T> {
+abstract class BaseFragment<T : ViewDataBinding, U : BaseViewModel> : DaggerFragment(),
+    DataBindable<T> {
 
     protected abstract val viewModelClass: Class<U>
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelProvider.Factory
-    protected val viewModel: U by lazy { ViewModelProviders.of(this, viewModelFactory).get(viewModelClass) }
+    protected val viewModel: U by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(viewModelClass)
+    }
 
     override var binding: T? = null
 
@@ -35,10 +38,14 @@ abstract class BaseFragment<T : ViewDataBinding, U : BaseViewModel> : DaggerFrag
         lifecycle.addObserver(viewModel)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return DataBindingUtil.inflate<T>(inflater, layoutRes, container, false)
             .also {
-                it.setLifecycleOwner(this)
+                it.lifecycleOwner = this
                 binding = it
                 onDataBound(it)
             }
@@ -46,7 +53,7 @@ abstract class BaseFragment<T : ViewDataBinding, U : BaseViewModel> : DaggerFrag
     }
 
     override fun onDestroyView() {
-        binding?.setLifecycleOwner(null)
+        binding?.lifecycleOwner = null
         binding = null
         super.onDestroyView()
     }

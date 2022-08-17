@@ -8,38 +8,18 @@
 
 package com.tinhtx.base_app.ui.home.repository
 
-import android.annotation.SuppressLint
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
+import com.tinhtx.base_app.extension.getValue
+import com.tinhtx.base_app.repository.TokenResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class HomeRepository @Inject constructor(
-    private val homeApiManager: HomeApiManager
+    private val homeApiService: HomeApiService
 ) {
 
-    private val _data = BehaviorSubject.create<String>()
-    val data: Observable<String> = _data.hide()
-
-    private val _error = BehaviorSubject.create<String>()
-    val error: Observable<String> = _error.hide()
-
-    @SuppressLint("CheckResult")
-    fun getData() {
-        homeApiManager.getData()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onSuccess = {
-                    _data.onNext(it.data)
-                },
-                onError = {
-                    _error.onNext(it.message ?: "")
-                }
-            )
+    suspend fun getData(): TokenResponse {
+        val apiKey = "a1916dc2316c4fa5a1b0976108165469"
+        return homeApiService.getData(apiKey).getValue()
     }
 }
