@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">base_app</string>
+    <string name="app_name">HRM</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="login_lable_username">Username</string>
+    <string name="login_lable_password">Password</string>
+    <string name="login_lable_title">Login HRM</string>
+    <string name="login_button_login">Login</string>
+    <string name="tv_fill_login_error">Please fill in your username, password</string>
+    <string name="tv_toast_logout">Logout</string>
+    <string name="tv_toast_welcome_back">Welcome back!</string>
 </resources>

@@ -8,7 +8,11 @@
 
 package com.tinhtx.base_app.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
@@ -35,5 +39,10 @@ abstract class BaseActivity<T : ViewDataBinding, U : BaseViewModel> : DaggerAppC
                 binding = it
                 onDataBound(it)
             }
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

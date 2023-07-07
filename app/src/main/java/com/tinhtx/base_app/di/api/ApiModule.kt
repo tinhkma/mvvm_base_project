@@ -12,6 +12,7 @@ import com.tinhtx.base_app.BuildConfig
 import com.tinhtx.base_app.repository.api.ApiConstants
 import com.tinhtx.base_app.repository.api.UserAgentInterceptor
 import com.tinhtx.base_app.ui.home.repository.HomeApiClient
+import com.tinhtx.base_app.ui.login.repository.LoginApiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,7 +33,7 @@ class ApiModule {
     @Provides
     @Singleton
     fun provideLogInterceptor(): HttpLoggingInterceptor {
-        return (if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE)
+        return (if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
             .let { HttpLoggingInterceptor().setLevel(it) }
     }
 
@@ -62,5 +63,11 @@ class ApiModule {
     @Singleton
     internal fun provideHomeApiClient(retrofit: Retrofit): HomeApiClient {
         return retrofit.create(HomeApiClient::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideLoginApiClient(retrofit: Retrofit): LoginApiClient {
+        return retrofit.create(LoginApiClient::class.java)
     }
 }

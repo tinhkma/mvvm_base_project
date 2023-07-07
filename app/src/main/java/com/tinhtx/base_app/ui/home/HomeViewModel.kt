@@ -8,10 +8,15 @@
 
 package com.tinhtx.base_app.ui.home
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.OnLifecycleEvent
 import com.tinhtx.base_app.base.BaseViewModel
+import com.tinhtx.base_app.ui.home.model.AssetsDataResponse
 import com.tinhtx.base_app.ui.home.repository.HomeRepository
+import com.tinhtx.base_app.ui.login.model.LoginResponse
 import com.tinhtx.base_app.utils.SingleLiveEvent
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -21,25 +26,33 @@ class HomeViewModel @Inject constructor(
     private val _onClick = SingleLiveEvent<Unit>()
     val onClick: LiveData<Unit> = _onClick
 
-    private val _data = SingleLiveEvent<String>()
-    val data: LiveData<String> = _data
+    private val _employeeData = SingleLiveEvent<LoginResponse.EmployeeData?>()
+    val employeeData: LiveData<LoginResponse.EmployeeData?> = _employeeData
+
+    private val _assetsDataResponse = SingleLiveEvent<AssetsDataResponse?>()
+    val assetsDataResponse: LiveData<AssetsDataResponse?> = _assetsDataResponse
 
     private val _error = SingleLiveEvent<String>()
     val error: LiveData<String> = _error
 
     init {
         disposables.addAll(
-            homeRepository.data.subscribe {
-                _data.value = it
+            homeRepository.employeeData.subscribe {
+                _employeeData.postValue(it)
+            },
+            homeRepository.assetsDataResponse.subscribe {
+                _assetsDataResponse.postValue(it)
             },
             homeRepository.error.subscribe {
-                _error.value = it
+                _error.postValue(it)
             }
         )
     }
 
-    fun onClickButton() {
-        _onClick.value = Unit
-        homeRepository.getData()
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    private fun getAssetsData(){
+        /*homeRepository.getAssetsData()*/
+        homeRepository.getEmployeeData()
     }
+
 }

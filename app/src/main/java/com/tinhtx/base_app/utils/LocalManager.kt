@@ -16,4 +16,10 @@ class LocalManager @Inject constructor() {
 
     @Inject
     lateinit var preferences: PreferenceManager
+
+
+    companion object {
+        const val PREFERENCE_KEY_TOKEN = "PREFERENCE_KEY_TOKEN"
+        const val LOGIN_RESPONSE_KEY = "LOGIN_RESPONSE_KEY"
+    }
 }

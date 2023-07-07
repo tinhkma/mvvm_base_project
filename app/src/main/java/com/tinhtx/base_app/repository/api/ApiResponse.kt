@@ -16,9 +16,9 @@ open class ApiResponse : Response {
     val body: ResponseBody? = null
 
     data class ResponseBody(
-        @SerializedName("status")
+        @SerializedName("success")
         val code: Int,
-        @SerializedName("info")
+        @SerializedName("message")
         val message: String
     )
 }

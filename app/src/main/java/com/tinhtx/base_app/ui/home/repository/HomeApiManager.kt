@@ -10,6 +10,7 @@ package com.tinhtx.base_app.ui.home.repository
 
 import com.tinhtx.base_app.repository.DataSampleResponse
 import com.tinhtx.base_app.repository.api.ApiManager
+import com.tinhtx.base_app.ui.home.model.AssetsDataResponse
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,7 +20,7 @@ class HomeApiManager @Inject constructor(
     private val apiManager: ApiManager,
     private val homeApiClient: HomeApiClient
 ) {
-    fun getData(): Single<DataSampleResponse> {
-        return homeApiClient.getData().map { apiManager.handleResponse(it) }
-    }
+    /*fun getAssetsData(): Single<AssetsDataResponse> {
+        return homeApiClient.getAssetsData().map { apiManager.handleResponse(it) }
+    }*/
 }
